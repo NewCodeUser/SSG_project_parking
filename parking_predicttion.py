@@ -50,7 +50,7 @@ def isHoliDay(inputDate, holiDayList, HoliDay):
 
 
 # train data
-df = pd.read_csv("/kaggle/input/parking-data/parking_data.csv", encoding="utf-8")
+df = pd.read_csv("./parking_data.csv", encoding="utf-8")
 df = df.dropna()
 df = df.astype({"no": "int", "maxParking": "int", "avilableParking": "int", "temperature": "int"})
 date1 = df["dateAndTime"].str.split(" ")
@@ -68,7 +68,7 @@ df["holiDay"] = df.apply(lambda x : isHoliDay(x["date"], result, x["holiDay"]), 
 
 
 # test data
-cmp_df = pd.read_csv("/kaggle/input/parking-data/cmp_data.csv", encoding="utf-8")
+cmp_df = pd.read_csv("./cmp_data.csv", encoding="utf-8")
 cmp_df = cmp_df.dropna()
 cmp_df = cmp_df.astype({"no": "int", "maxParking": "int", "avilableParking": "int", "temperature": "int"})
 cmp_date1 = cmp_df["dateAndTime"].str.split(" ")
