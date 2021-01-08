@@ -13,20 +13,19 @@ from sklearn.linear_model import LinearRegression
 from sklearn.cluster import KMeans
 import os
 
-def get_request_query(url, solYear, solMonth, serviceKey):
-    request_query = url + "?solYear=" + solYear + "&solMonth=" + solMonth + "&serviceKey=" + serviceKey
-    return request_query
-
 def getHoliDay(inputYear):
     URL = "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo"
     SERVICEKEY = "17sl4WcpRqvwbiEVl9QyQdMW9P9Y%2FC7O9B6Om%2FgSJhbSODZ5YyOxZS3l%2BjNbM6QjY6AhyhTclxQPY2BX8wSUCg%3D%3D"
     solYear  = str(inputYear)
     result = []
 
+    # all month loop
     for solMonth in range(1, 13):
-        solMonth = "%02d" % solMonth
-        request_query = get_request_query(URL, solYear, solMonth, SERVICEKEY)
-        response = requests.get(url=request_query)
+        solMonth = "%02d" % solMonth   # solMonth format
+        requestQuery = URL + "?solYear=" + solYear + "&solMonth=" + solMonth + "&serviceKey=" + SERVICEKEY
+        response = requests.get(url=requestQuery)
+
+        # get holiday list
         cntIndex = response.text.find("<totalCount>") + 12
         cnt = int(response.text[cntIndex:cntIndex+1])
         offset = 0
@@ -131,6 +130,7 @@ input_parkingPlaceNo = int(input("input parking place no: "))
 input_date = input("input date YYYY-MM-YY: ")
 input_time = input("input time HH: ")
 input_temperature = int(input("input temperature: "))
+result = pd.to_datetime(getHoliDay(input_date[0:3]), format="%Y-%m-%d", errors='raise')
 input_date = pd.to_datetime(input_date, format="%Y-%m-%d", errors="raise")
 input_data = pd.DataFrame({"no": input_parkingPlaceNo,  "date": input_date, "temperature": input_temperature, "time": input_time}, index = [0])
 input_data["weekDay"] = input_data["date"].dt.day_name()
